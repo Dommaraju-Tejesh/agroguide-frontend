@@ -1,42 +1,68 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api";
-import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [data, setData] = useState({ phone: "", password: "" });
-  const nav = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handle = async () => {
-  try {
-    const res = await api.post("/auth/login", data);
-    localStorage.setItem("user", JSON.stringify(res.data.user));
-    nav("/dashboard");
-  } catch (err) {
-    alert(err.response?.data?.message || "Login failed");
-  }
-};
-
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res = await api.post("/auth/login", { email, password });
+    localStorage.setItem("user", JSON.stringify(res.data));
+    navigate("/dashboard");
+  };
 
   return (
-  <div>
-    <h2>Login</h2>
+    <div
+      style={{
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1598515214211-89d3c73ae83b')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "darken",
+        backgroundColor: "rgba(0,0,0,0.45)",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          backdropFilter: "blur(12px)",
+          background: "rgba(255,255,255,0.25)",
+          padding: "40px",
+          borderRadius: "20px",
+          width: "400px",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+        }}
+      >
+        <h3 className="text-center mb-3">AgroGuide Login 🌿</h3>
+        <p className="text-center">
+          "The farmer has to be an optimist or he wouldn’t still be a farmer."
+        </p>
 
-    <input
-      placeholder="Phone"
-      onChange={e => setData({ ...data, phone: e.target.value })}
-    />
-    <input
-      placeholder="Password"
-      type="password"
-      onChange={e => setData({ ...data, password: e.target.value })}
-    />
+        <form onSubmit={handleLogin}>
+          <input
+            className="form-control mb-3"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            className="form-control mb-3"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button className="btn btn-success w-100">Login</button>
+        </form>
 
-    <button onClick={handle}>Login</button>
-
-    <p>
-      New user? <a href="/register">Register here</a>
-    </p>
-  </div>
-);
-
+        <p className="mt-3 text-center">
+          New farmer? <Link to="/register">Register here</Link>
+        </p>
+      </div>
+    </div>
+  );
 }
