@@ -1,21 +1,46 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import api from "../api";
 
 export default function Login() {
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState(1);
 
-  const handleLogin = async (e) => {
+  const sendOTP = async (e) => {
     e.preventDefault();
-    // your existing login API call here
+    try {
+      await api.post("/otp/send-otp", { phone });
+      alert("OTP Sent ✅");
+      setStep(2);
+    } catch (err) {
+      alert("OTP send failed ❌");
+      console.log(err);
+    }
+  };
+
+  const verifyOTP = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await api.post("/otp/verify-otp", {
+        phone,
+        otp,
+      });
+
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      alert("Login Successful ✅");
+      window.location.href = "/dashboard";
+    } catch (err) {
+      alert("OTP verification failed ❌");
+      console.log(err);
+    }
   };
 
   return (
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae')",
-
+          "url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundBlendMode: "darken",
@@ -39,57 +64,75 @@ export default function Login() {
       >
         <h2>AgroGuide Login 🌿</h2>
         <p style={{ fontStyle: "italic" }}>
-          “To forget how to dig the earth and tend the soil is to forget
-          ourselves.”
+          “To forget how to dig the earth and tend the soil is to forget ourselves.”
         </p>
 
-        <form onSubmit={handleLogin}>
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              margin: "12px 0",
-              borderRadius: "8px",
-              border: "none",
-            }}
-          />
+        {step === 1 && (
+          <form onSubmit={sendOTP}>
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              style={{
+                width: "100%",
+                padding: "12px",
+                margin: "12px 0",
+                borderRadius: "8px",
+                border: "none",
+              }}
+            />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{
-              width: "100%",
-              padding: "12px",
-              margin: "12px 0",
-              borderRadius: "8px",
-              border: "none",
-            }}
-          />
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "#ffc107",
+                border: "none",
+                fontWeight: "bold",
+                borderRadius: "8px",
+              }}
+            >
+              Send OTP
+            </button>
+          </form>
+        )}
 
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "12px",
-              background: "#198754",
-              border: "none",
-              color: "white",
-              fontWeight: "bold",
-              borderRadius: "8px",
-              marginTop: "10px",
-            }}
-          >
-            Login
-          </button>
-        </form>
+        {step === 2 && (
+          <form onSubmit={verifyOTP}>
+            <input
+              type="number"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+              style={{
+                width: "100%",
+                padding: "12px",
+                margin: "12px 0",
+                borderRadius: "8px",
+                border: "none",
+              }}
+            />
+
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: "#198754",
+                border: "none",
+                color: "white",
+                fontWeight: "bold",
+                borderRadius: "8px",
+              }}
+            >
+              Verify & Login
+            </button>
+          </form>
+        )}
 
         <p style={{ marginTop: "15px" }}>
           New farmer?{" "}
@@ -101,3 +144,4 @@ export default function Login() {
     </div>
   );
 }
+
