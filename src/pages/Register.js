@@ -18,11 +18,11 @@ export default function Register() {
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1464226184884-fa280b87c399')",
+          "url('https://images.unsplash.com/photo-1560493676-04071c5f467b')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundBlendMode: "darken",
-        backgroundColor: "rgba(0,0,0,0.45)",
+        backgroundColor: "rgba(0,0,0,0.55)",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
