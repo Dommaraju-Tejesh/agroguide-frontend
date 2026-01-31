@@ -4,13 +4,21 @@ import api from "../api";
 
 export default function Register() {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState(1);
+
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    await api.post("/auth/register", { name, email, password });
+  const sendOtp = async () => {
+    await api.post("/auth/send-otp", { phone });
+    alert("OTP sent to your phone");
+    setStep(2);
+  };
+
+  const verifyOtpAndRegister = async () => {
+    await api.post("/auth/verify-otp", { phone, otp, name });
+    alert("Registration successful");
     navigate("/");
   };
 
@@ -18,11 +26,11 @@ export default function Register() {
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1560493676-04071c5f467b')",
+          "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundBlendMode: "darken",
-        backgroundColor: "rgba(0,0,0,0.55)",
+        backgroundColor: "rgba(0,0,0,0.6)",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -39,33 +47,46 @@ export default function Register() {
           boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
         }}
       >
-        <h3 className="text-center mb-3">Join AgroGuide 🌾</h3>
-        <p className="text-center">
-          "Agriculture is our wisest pursuit, because it will in the end
-          contribute most to real wealth."
+        <h3 className="text-center mb-3">Join AgroGuide 🚜</h3>
+        <p className="text-center text-white">
+          “To forget how to dig the earth is to forget ourselves.”
         </p>
 
-        <form onSubmit={handleRegister}>
-          <input
-            className="form-control mb-3"
-            placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            className="form-control mb-3"
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            className="form-control mb-3"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button className="btn btn-warning w-100">Register</button>
-        </form>
+        {step === 1 && (
+          <>
+            <input
+              className="form-control mb-3"
+              placeholder="Name"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              className="form-control mb-3"
+              placeholder="Phone Number (+91...)"
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <button onClick={sendOtp} className="btn btn-warning w-100">
+              Send OTP
+            </button>
+          </>
+        )}
 
-        <p className="mt-3 text-center">
+        {step === 2 && (
+          <>
+            <input
+              className="form-control mb-3"
+              placeholder="Enter OTP"
+              onChange={(e) => setOtp(e.target.value)}
+            />
+            <button
+              onClick={verifyOtpAndRegister}
+              className="btn btn-success w-100"
+            >
+              Verify & Register
+            </button>
+          </>
+        )}
+
+        <p className="mt-3 text-center text-white">
           Already have account? <Link to="/">Login</Link>
         </p>
       </div>
