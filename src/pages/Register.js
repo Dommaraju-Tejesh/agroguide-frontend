@@ -10,9 +10,11 @@ export default function Register() {
 
   const sendOTP = async () => {
     try {
-      await api.post("/otp/send-otp", {
-        phone: phone,   // ❗ no +91 here
+      await api.post("/otp/verify-otp", {
+        phone: `+91${phone}`, // ✅ add +91 here
+        otp: otp,
       });
+
       alert("OTP Sent ✅");
       setStep(2);
     } catch (err) {
@@ -25,7 +27,7 @@ export default function Register() {
     try {
       await api.post("/otp/verify-otp", {
         phone: phone,
-        otp: otp,   // ❗ correct key
+        otp: otp, // ❗ correct key
       });
 
       // after OTP verified, create user
