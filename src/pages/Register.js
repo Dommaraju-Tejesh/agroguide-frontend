@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api";
 
 export default function Register() {
@@ -7,29 +7,39 @@ export default function Register() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
-  const navigate = useNavigate();
 
-  const sendOtp = async () => {
+  const sendOTP = async () => {
     try {
-      const res = await api.post("/auth/send-otp", { phone });
-      alert(res.data.message);
+      await api.post("/otp/send-otp", {
+        phone: phone,   // ❗ no +91 here
+      });
+      alert("OTP Sent ✅");
       setStep(2);
     } catch (err) {
-      alert(err.response?.data?.message || "OTP send failed");
+      alert("OTP send failed ❌");
+      console.log(err);
     }
   };
 
-  const verifyOtp = async () => {
+  const verifyOTP = async () => {
     try {
-      const res = await api.post("/auth/verify-otp", {
+      await api.post("/otp/verify-otp", {
+        phone: phone,
+        otp: otp,   // ❗ correct key
+      });
+
+      // after OTP verified, create user
+      await api.post("/auth/register", {
         name,
         phone,
-        otp,
+        password: "default123",
       });
-      alert(res.data.message);
-      navigate("/");
+
+      alert("Registered Successfully ✅");
+      window.location.href = "/";
     } catch (err) {
-      alert(err.response?.data?.message || "OTP verification failed");
+      alert("OTP verification failed ❌");
+      console.log(err);
     }
   };
 
@@ -37,7 +47,7 @@ export default function Register() {
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef')",
+          "url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
@@ -47,36 +57,49 @@ export default function Register() {
       }}
     >
       <div
-        className="card p-4 shadow-lg"
         style={{
-          width: "420px",
+          backdropFilter: "blur(12px)",
+          background: "rgba(0,0,0,0.55)",
+          padding: "40px",
           borderRadius: "20px",
-          backdropFilter: "blur(15px)",
-          background: "rgba(255,255,255,0.85)",
+          width: "380px",
+          color: "white",
+          textAlign: "center",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
         }}
       >
-        <h3 className="text-center mb-2">Join AgroGuide 🚜</h3>
-        <p className="text-center text-muted mb-4">
+        <h2>Join AgroGuide 🚜</h2>
+        <p style={{ fontStyle: "italic" }}>
           “To forget how to dig the earth is to forget ourselves.”
         </p>
 
         {step === 1 && (
           <>
             <input
-              className="form-control mb-3"
+              type="text"
               placeholder="Your Name"
+              value={name}
               onChange={(e) => setName(e.target.value)}
+              style={{ width: "100%", padding: "10px", margin: "10px 0" }}
             />
+
             <input
-              className="form-control mb-3"
-              placeholder="Phone Number (+91...)"
+              type="number"
+              placeholder="Phone Number"
+              value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              style={{ width: "100%", padding: "10px", margin: "10px 0" }}
             />
 
             <button
-              type="button"
-              className="btn btn-warning w-100 fw-bold"
-              onClick={sendOtp}
+              onClick={sendOTP}
+              style={{
+                width: "100%",
+                padding: "10px",
+                background: "#ffc107",
+                border: "none",
+                fontWeight: "bold",
+              }}
             >
               Send OTP
             </button>
@@ -86,22 +109,30 @@ export default function Register() {
         {step === 2 && (
           <>
             <input
-              className="form-control mb-3"
+              type="number"
               placeholder="Enter OTP"
+              value={otp}
               onChange={(e) => setOtp(e.target.value)}
+              style={{ width: "100%", padding: "10px", margin: "10px 0" }}
             />
 
             <button
-              type="button"
-              className="btn btn-success w-100 fw-bold"
-              onClick={verifyOtp}
+              onClick={verifyOTP}
+              style={{
+                width: "100%",
+                padding: "10px",
+                background: "#198754",
+                border: "none",
+                color: "white",
+                fontWeight: "bold",
+              }}
             >
               Verify & Register
             </button>
           </>
         )}
 
-        <p className="mt-4 text-center">
+        <p style={{ marginTop: "15px" }}>
           Already have account? <Link to="/">Login</Link>
         </p>
       </div>
