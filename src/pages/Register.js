@@ -8,11 +8,11 @@ export default function Register() {
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
 
+  // STEP 1 — SEND OTP
   const sendOTP = async () => {
     try {
-      await api.post("/otp/verify-otp", {
-        phone: `+91${phone}`, // ✅ add +91 here
-        otp: otp,
+      await api.post("/otp/send", {
+        phone: `+91${phone}`,
       });
 
       alert("OTP Sent ✅");
@@ -23,17 +23,17 @@ export default function Register() {
     }
   };
 
+  // STEP 2 — VERIFY OTP + REGISTER USER
   const verifyOTP = async () => {
     try {
-      await api.post("/otp/verify-otp", {
-        phone: phone,
-        otp: otp, // ❗ correct key
+      await api.post("/otp/verify", {
+        phone: `+91${phone}`,
+        code: otp,          // ✅ correct key
       });
 
-      // after OTP verified, create user
       await api.post("/auth/register", {
         name,
-        phone,
+        phone: `+91${phone}`,
         password: "default123",
       });
 
@@ -49,7 +49,7 @@ export default function Register() {
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854')",
+          "url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
@@ -60,11 +60,11 @@ export default function Register() {
     >
       <div
         style={{
-          backdropFilter: "blur(12px)",
+          backdropFilter: "blur(15px)",
           background: "rgba(0,0,0,0.55)",
-          padding: "40px",
+          padding: "45px",
           borderRadius: "20px",
-          width: "380px",
+          width: "400px",
           color: "white",
           textAlign: "center",
           boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
@@ -82,7 +82,7 @@ export default function Register() {
               placeholder="Your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={{ width: "100%", padding: "10px", margin: "10px 0" }}
+              style={{ width: "100%", padding: "12px", margin: "12px 0" }}
             />
 
             <input
@@ -90,14 +90,14 @@ export default function Register() {
               placeholder="Phone Number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              style={{ width: "100%", padding: "10px", margin: "10px 0" }}
+              style={{ width: "100%", padding: "12px", margin: "12px 0" }}
             />
 
             <button
               onClick={sendOTP}
               style={{
                 width: "100%",
-                padding: "10px",
+                padding: "12px",
                 background: "#ffc107",
                 border: "none",
                 fontWeight: "bold",
@@ -115,14 +115,14 @@ export default function Register() {
               placeholder="Enter OTP"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              style={{ width: "100%", padding: "10px", margin: "10px 0" }}
+              style={{ width: "100%", padding: "12px", margin: "12px 0" }}
             />
 
             <button
               onClick={verifyOTP}
               style={{
                 width: "100%",
-                padding: "10px",
+                padding: "12px",
                 background: "#198754",
                 border: "none",
                 color: "white",
