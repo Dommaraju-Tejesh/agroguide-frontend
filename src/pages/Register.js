@@ -7,19 +7,30 @@ export default function Register() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
-
   const navigate = useNavigate();
 
   const sendOtp = async () => {
-    await api.post("/auth/send-otp", { phone });
-    alert("OTP sent to your phone");
-    setStep(2);
+    try {
+      const res = await api.post("/auth/send-otp", { phone });
+      alert(res.data.message);
+      setStep(2);
+    } catch (err) {
+      alert(err.response?.data?.message || "OTP send failed");
+    }
   };
 
-  const verifyOtpAndRegister = async () => {
-    await api.post("/auth/verify-otp", { phone, otp, name });
-    alert("Registration successful");
-    navigate("/");
+  const verifyOtp = async () => {
+    try {
+      const res = await api.post("/auth/verify-otp", {
+        name,
+        phone,
+        otp,
+      });
+      alert(res.data.message);
+      navigate("/");
+    } catch (err) {
+      alert(err.response?.data?.message || "OTP verification failed");
+    }
   };
 
   return (
@@ -29,8 +40,6 @@ export default function Register() {
           "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundBlendMode: "darken",
-        backgroundColor: "rgba(0,0,0,0.6)",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -38,17 +47,16 @@ export default function Register() {
       }}
     >
       <div
+        className="card p-4 shadow-lg"
         style={{
-          backdropFilter: "blur(12px)",
-          background: "rgba(255,255,255,0.25)",
-          padding: "40px",
+          width: "420px",
           borderRadius: "20px",
-          width: "400px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+          backdropFilter: "blur(15px)",
+          background: "rgba(255,255,255,0.85)",
         }}
       >
-        <h3 className="text-center mb-3">Join AgroGuide 🚜</h3>
-        <p className="text-center text-white">
+        <h3 className="text-center mb-2">Join AgroGuide 🚜</h3>
+        <p className="text-center text-muted mb-4">
           “To forget how to dig the earth is to forget ourselves.”
         </p>
 
@@ -56,7 +64,7 @@ export default function Register() {
           <>
             <input
               className="form-control mb-3"
-              placeholder="Name"
+              placeholder="Your Name"
               onChange={(e) => setName(e.target.value)}
             />
             <input
@@ -64,7 +72,12 @@ export default function Register() {
               placeholder="Phone Number (+91...)"
               onChange={(e) => setPhone(e.target.value)}
             />
-            <button onClick={sendOtp} className="btn btn-warning w-100">
+
+            <button
+              type="button"
+              className="btn btn-warning w-100 fw-bold"
+              onClick={sendOtp}
+            >
               Send OTP
             </button>
           </>
@@ -77,16 +90,18 @@ export default function Register() {
               placeholder="Enter OTP"
               onChange={(e) => setOtp(e.target.value)}
             />
+
             <button
-              onClick={verifyOtpAndRegister}
-              className="btn btn-success w-100"
+              type="button"
+              className="btn btn-success w-100 fw-bold"
+              onClick={verifyOtp}
             >
               Verify & Register
             </button>
           </>
         )}
 
-        <p className="mt-3 text-center text-white">
+        <p className="mt-4 text-center">
           Already have account? <Link to="/">Login</Link>
         </p>
       </div>
