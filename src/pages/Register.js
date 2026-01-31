@@ -9,65 +9,44 @@ export default function Register() {
   const [step, setStep] = useState(1);
 
   const sendOTP = async () => {
-  try {
-    await api.post("/otp/send-otp", {
-      phone: `+91${phone}`,
-    });
+    try {
+      await api.post("/otp/send-otp", {
+        phone: `+91${phone}`,
+      });
+      alert("OTP Sent ✅");
+      setStep(2);
+    } catch (err) {
+      alert("OTP send failed ❌");
+      console.log(err);
+    }
+  };
 
-    alert("OTP Sent ✅");
-    setStep(2);
-  } catch (err) {
-    alert("OTP send failed ❌");
-    console.log(err);
-  }
-};
+  const verifyOTP = async () => {
+    try {
+      await api.post("/otp/verify-otp", {
+        phone: `+91${phone}`,
+        otp: otp,
+      });
 
-const verifyOTP = async () => {
-  try {
-    await api.post("/otp/verify-otp", {
-      phone: `+91${phone}`,
-      code: otp,
-    });
+      await api.post("/auth/register", {
+        name,
+        phone: `+91${phone}`,
+        password: "default123",
+      });
 
-    await api.post("/auth/register", {
-      name,
-      phone: `+91${phone}`,
-      password: "default123",
-    });
-
-    alert("Registered Successfully ✅");
-    window.location.href = "/";
-  } catch (err) {
-    alert("OTP verification failed ❌");
-    console.log(err);
-const verifyOTP = async () => {
-  try {
-    await api.post("/otp/verify-otp", {
-      phone: `+91${phone}`,   // ⭐ THIS IS THE FIX
-      otp: otp,
-    });
-
-    await api.post("/auth/register", {
-      name,
-      phone: `+91${phone}`,
-      password: "default123",
-    });
-
-    alert("Registered Successfully ✅");
-    window.location.href = "/";
-  } catch (err) {
-    alert("OTP verification failed ❌");
-    console.log(err);
-  }
-};
-
-
+      alert("Registered Successfully ✅");
+      window.location.href = "/";
+    } catch (err) {
+      alert("OTP verification failed ❌");
+      console.log(err);
+    }
+  };
 
   return (
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1606788075761-9a88d90c05d5')",
+          "url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
@@ -93,11 +72,13 @@ const verifyOTP = async () => {
           <>
             <input
               placeholder="Your Name"
+              value={name}
               onChange={(e) => setName(e.target.value)}
               style={{ width: "100%", padding: "10px", margin: "10px 0" }}
             />
             <input
               placeholder="Phone Number"
+              value={phone}
               onChange={(e) => setPhone(e.target.value)}
               style={{ width: "100%", padding: "10px", margin: "10px 0" }}
             />
@@ -114,6 +95,7 @@ const verifyOTP = async () => {
           <>
             <input
               placeholder="Enter OTP"
+              value={otp}
               onChange={(e) => setOtp(e.target.value)}
               style={{ width: "100%", padding: "10px", margin: "10px 0" }}
             />
