@@ -40,8 +40,27 @@ const verifyOTP = async () => {
   } catch (err) {
     alert("OTP verification failed ❌");
     console.log(err);
+const verifyOTP = async () => {
+  try {
+    await api.post("/otp/verify-otp", {
+      phone: `+91${phone}`,   // ⭐ THIS IS THE FIX
+      otp: otp,
+    });
+
+    await api.post("/auth/register", {
+      name,
+      phone: `+91${phone}`,
+      password: "default123",
+    });
+
+    alert("Registered Successfully ✅");
+    window.location.href = "/";
+  } catch (err) {
+    alert("OTP verification failed ❌");
+    console.log(err);
   }
 };
+
 
 
   return (
