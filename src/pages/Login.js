@@ -13,8 +13,8 @@ export default function Login() {
   return (
     <div
       style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef')",
-
+        backgroundImage:
+          "url('https://images.unsplash.com/photo-1592982537447-6f2a6a0b8b8a')",
 
         backgroundSize: "cover",
         backgroundPosition: "center",
