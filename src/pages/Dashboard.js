@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { getHistory } from "../api/advisory";
-import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -26,7 +25,6 @@ export default function Dashboard() {
       }}
     >
       <div className="container">
-
         {/* GLASS CARD */}
         <div
           style={{
@@ -41,16 +39,13 @@ export default function Dashboard() {
         >
           <div className="text-center mb-4">
             <h2>Welcome, {user.name} 🌾</h2>
-            <p>Smart Farming Advisory Dashboard</p>
-          </div>
-
-          <div className="text-center mb-4">
-            <Link className="btn btn-success me-3 px-4" to="/advisory">
-              Get New Advice
-            </Link>
-            <Link className="btn btn-warning px-4" to="/admin">
-              Suggest / Admin
-            </Link>
+            <p className="fs-5">
+              "Farming is a profession of hope. Every seed planted is a promise for tomorrow."
+            </p>
+            <p>
+              Smart decisions today lead to healthier crops and better yields.
+              Let AgroGuide assist you in every stage of your farming journey.
+            </p>
           </div>
 
           <h4 className="mb-3">Your Advisory History</h4>
@@ -81,7 +76,6 @@ export default function Dashboard() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
