@@ -1,43 +1,49 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Advisory from "./pages/Advisory";
 import Admin from "./pages/Admin";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+const PrivateRoute = ({ children }) => {
+  const user = localStorage.getItem("user");
+  return user ? children : <Navigate to="/" />;
+};
 
 function App() {
   return (
     <BrowserRouter>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-success">
-        <div className="container">
-          <Link className="navbar-brand" to="/dashboard">
-            🌾 AgroGuide
-          </Link>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-          <div>
-            <Link className="btn btn-light me-2" to="/dashboard">
-              Dashboard
-            </Link>
-            <Link className="btn btn-light me-2" to="/advisory">
-              Get Advice
-            </Link>
-            <Link className="btn btn-warning" to="/admin">
-              Suggest / Admin
-            </Link>
-          </div>
-        </div>
-      </nav>
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
 
-      <div className="container mt-4">
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/advisory" element={<Advisory />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </div>
+        <Route
+          path="/advisory"
+          element={
+            <PrivateRoute>
+              <Advisory />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 }

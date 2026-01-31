@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import api from "../api";
+import { Link, useNavigate } from "react-router-dom";
+import tractor from "../assets/tractor-login.jpg";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -9,20 +9,15 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await api.post("/auth/login", { email, password });
-    localStorage.setItem("user", JSON.stringify(res.data));
-    navigate("/dashboard");
+    // your existing login code here
   };
 
   return (
     <div
       style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef')",
+        backgroundImage: `url(${tractor})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundBlendMode: "darken",
-        backgroundColor: "rgba(0,0,0,0.55)",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -31,35 +26,55 @@ export default function Login() {
     >
       <div
         style={{
-          backdropFilter: "blur(12px)",
-          background: "rgba(255,255,255,0.25)",
+          backdropFilter: "blur(10px)",
+          background: "rgba(0,0,0,0.55)",
           padding: "40px",
-          borderRadius: "20px",
-          width: "400px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+          borderRadius: "15px",
+          width: "350px",
+          color: "white",
+          textAlign: "center",
         }}
       >
-        <h3 className="text-center mb-3">AgroGuide Login 🌿</h3>
-        <p className="text-center">
-          "The farmer has to be an optimist or he wouldn’t still be a farmer."
+        <h2>AgroGuide Login 🌿</h2>
+        <p style={{ fontStyle: "italic" }}>
+          “The farmer has to be an optimist or he wouldn’t still be a farmer.”
         </p>
 
         <form onSubmit={handleLogin}>
           <input
-            className="form-control mb-3"
+            type="email"
             placeholder="Email"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", margin: "10px 0" }}
           />
+
           <input
             type="password"
-            className="form-control mb-3"
             placeholder="Password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ width: "100%", padding: "10px", margin: "10px 0" }}
           />
-          <button className="btn btn-success w-100">Login</button>
+
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "10px",
+              background: "#198754",
+              border: "none",
+              color: "white",
+              fontWeight: "bold",
+            }}
+          >
+            Login
+          </button>
         </form>
 
-        <p className="mt-3 text-center">
+        <p style={{ marginTop: "15px" }}>
           New farmer? <Link to="/register">Register here</Link>
         </p>
       </div>
