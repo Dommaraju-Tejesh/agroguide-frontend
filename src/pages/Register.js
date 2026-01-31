@@ -9,38 +9,40 @@ export default function Register() {
   const [step, setStep] = useState(1);
 
   const sendOTP = async () => {
-    try {
-      await api.post("/otp/send-otp", {
-        phone: `+91${phone}`,
-      });
-      alert("OTP Sent ✅");
-      setStep(2);
-    } catch (err) {
-      alert("OTP send failed ❌");
-      console.log(err);
-    }
-  };
+  try {
+    await api.post("/otp/send-otp", {
+      phone: phone,   // ❌ NO +91 here
+    });
+    alert("OTP Sent ✅");
+    setStep(2);
+  } catch (err) {
+    alert("OTP send failed ❌");
+    console.log(err);
+  }
+};
+
 
   const verifyOTP = async () => {
-    try {
-      await api.post("/otp/verify-otp", {
-        phone: `+91${phone}`,
-        otp: otp,
-      });
+  try {
+    await api.post("/otp/verify-otp", {
+      phone: phone,   // ❌ NO +91 here
+      otp: otp,
+    });
 
-      await api.post("/auth/register", {
-        name,
-        phone: `+91${phone}`,
-        password: "default123",
-      });
+    await api.post("/auth/register", {
+      name,
+      phone: phone,   // ❌ NO +91 here
+      password: "default123",
+    });
 
-      alert("Registered Successfully ✅");
-      window.location.href = "/";
-    } catch (err) {
-      alert("OTP verification failed ❌");
-      console.log(err);
-    }
-  };
+    alert("Registered Successfully ✅");
+    window.location.href = "/";
+  } catch (err) {
+    alert("OTP verification failed ❌");
+    console.log(err);
+  }
+};
+
 
   return (
     <div
