@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    // your existing login API call here
   };
 
   return (
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1500382017468-9049fed747ef')", // 🚜 tractor farming
+          "url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae')",
+
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundBlendMode: "darken",
@@ -30,27 +29,26 @@ export default function Login() {
       <div
         style={{
           backdropFilter: "blur(12px)",
-          background: "rgba(255,255,255,0.12)",
+          background: "rgba(0,0,0,0.55)",
           padding: "40px",
-          borderRadius: "18px",
+          borderRadius: "15px",
           width: "360px",
           color: "white",
           textAlign: "center",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
         }}
       >
-        <h2 style={{ marginBottom: "10px" }}>AgroGuide Login 🌿</h2>
-
-        <p style={{ fontStyle: "italic", fontSize: "14px" }}>
-          “To forget how to dig the earth and to tend the soil is to forget ourselves.”
+        <h2>AgroGuide Login 🌿</h2>
+        <p style={{ fontStyle: "italic" }}>
+          “To forget how to dig the earth and tend the soil is to forget
+          ourselves.”
         </p>
 
         <form onSubmit={handleLogin}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="tel"
+            placeholder="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             required
             style={{
               width: "100%",
@@ -83,20 +81,19 @@ export default function Login() {
               padding: "12px",
               background: "#198754",
               border: "none",
-              borderRadius: "8px",
               color: "white",
               fontWeight: "bold",
+              borderRadius: "8px",
               marginTop: "10px",
-              cursor: "pointer",
             }}
           >
             Login
           </button>
         </form>
 
-        <p style={{ marginTop: "18px" }}>
+        <p style={{ marginTop: "15px" }}>
           New farmer?{" "}
-          <Link to="/register" style={{ color: "#ffd43b", fontWeight: "bold" }}>
+          <Link to="/register" style={{ color: "#ffc107" }}>
             Register here
           </Link>
         </p>
@@ -104,4 +101,3 @@ export default function Login() {
     </div>
   );
 }
-
