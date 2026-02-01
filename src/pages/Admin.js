@@ -23,7 +23,7 @@ export default function Admin() {
       <div
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1517202383675-eb0a6e27775f')",
+            "url('https://images.unsplash.com/photo-1524486361537-8ad15938e1a3')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
