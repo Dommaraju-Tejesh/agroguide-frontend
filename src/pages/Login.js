@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../api";
+import { auth } from "../firebase";
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
 
 export default function Login() {
   const [phone, setPhone] = useState("");
@@ -8,36 +12,55 @@ export default function Login() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
 
+  const setupRecaptcha = () => {
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      { size: "invisible" },
+      auth
+    );
+  };
+
   const sendOTP = async (e) => {
     e.preventDefault();
+
     try {
-      await api.post("/otp/send-otp", {
-        phone: phone,
-      });
+      setupRecaptcha();
+
+      const appVerifier = window.recaptchaVerifier;
+      const formattedPhone = `+91${phone}`;
+
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        formattedPhone,
+        appVerifier
+      );
+
+      window.confirmationResult = confirmation;
       alert("OTP Sent ✅");
       setStep(2);
     } catch (err) {
-      alert("OTP send failed ❌");
-      console.log(err);
+      alert(err.message);
     }
   };
 
   const verifyOTP = async (e) => {
     e.preventDefault();
-    try {
-      const res = await api.post("/otp/verify-otp", {
-        phone: phone,
-        otp: otp,
-      });
 
-      // 🔥 store user
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+    try {
+      const result = await window.confirmationResult.confirm(otp);
+
+      // store user locally
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          phone: result.user.phoneNumber,
+        })
+      );
 
       alert("Login Successful ✅");
       navigate("/dashboard");
     } catch (err) {
-      alert("OTP verification failed ❌");
-      console.log(err);
+      alert("Invalid OTP ❌");
     }
   };
 
@@ -66,9 +89,6 @@ export default function Login() {
         }}
       >
         <h2>AgroGuide Login 🌿</h2>
-        <p style={{ fontStyle: "italic" }}>
-          “To forget how to dig the earth and tend the soil is to forget ourselves.”
-        </p>
 
         {step === 1 && (
           <form onSubmit={sendOTP}>
@@ -134,6 +154,8 @@ export default function Login() {
             </button>
           </form>
         )}
+
+        <div id="recaptcha-container"></div>
 
         <p style={{ marginTop: "15px" }}>
           New farmer?{" "}
