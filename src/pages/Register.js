@@ -11,7 +11,7 @@ export default function Register() {
   const sendOTP = async () => {
   try {
     await api.post("/otp/send-otp", {
-      phone: phone,   // ❌ NO +91 here
+      phone: `+91${phone}`,   // ❌ NO +91 here
     });
     alert("OTP Sent ✅");
     setStep(2);
@@ -25,13 +25,13 @@ export default function Register() {
   const verifyOTP = async () => {
   try {
     await api.post("/otp/verify-otp", {
-      phone: phone,   // ❌ NO +91 here
+      phone: `+91${phone}`,   // ❌ NO +91 here
       otp: otp,
     });
 
     await api.post("/auth/register", {
       name,
-      phone: phone,   // ❌ NO +91 here
+      phone: `+91${phone}`,   // ❌ NO +91 here
       password: "default123",
     });
 
