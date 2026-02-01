@@ -16,6 +16,15 @@ export default function Admin() {
     alert("Rule added successfully 🌾");
   };
 
+  const innerCard = {
+    backdropFilter: "blur(8px)",
+    background: "rgba(255,255,255,0.35)",
+    borderRadius: "15px",
+    padding: "20px",
+    border: "1px solid rgba(255,255,255,0.3)",
+    marginBottom: "20px",
+  };
+
   return (
     <>
       <Navbar />
@@ -33,7 +42,7 @@ export default function Admin() {
         <div className="container">
           <div
             style={{
-              maxWidth: "600px",
+              maxWidth: "700px",
               margin: "auto",
               backdropFilter: "blur(12px)",
               background: "rgba(255, 255, 255, 0.25)",
@@ -46,39 +55,56 @@ export default function Admin() {
           >
             <div className="text-center mb-4">
               <h2>🌾 Add Advisory Rule</h2>
-              <p>
-                Share your farming knowledge to help farmers make smarter
-                decisions.
-              </p>
+              <p>Help farmers with your valuable knowledge</p>
             </div>
 
             <form onSubmit={handleSubmit}>
-              <input
-                className="form-control mb-3"
-                placeholder="Crop (e.g. Rice)"
-                onChange={(e) => setForm({ ...form, crop: e.target.value })}
-              />
+              <div style={innerCard}>
+                <label>Crop</label>
+                <input
+                  className="form-control"
+                  placeholder="e.g. Rice"
+                  onChange={(e) =>
+                    setForm({ ...form, crop: e.target.value })
+                  }
+                />
+              </div>
 
-              <input
-                className="form-control mb-3"
-                placeholder="Soil (e.g. Black Soil)"
-                onChange={(e) => setForm({ ...form, soil: e.target.value })}
-              />
+              <div style={innerCard}>
+                <label>Soil Type</label>
+                <input
+                  className="form-control"
+                  placeholder="e.g. Black Soil"
+                  onChange={(e) =>
+                    setForm({ ...form, soil: e.target.value })
+                  }
+                />
+              </div>
 
-              <input
-                className="form-control mb-3"
-                placeholder="Stage (e.g. Seeding)"
-                onChange={(e) => setForm({ ...form, stage: e.target.value })}
-              />
+              <div style={innerCard}>
+                <label>Crop Stage</label>
+                <input
+                  className="form-control"
+                  placeholder="e.g. Seeding"
+                  onChange={(e) =>
+                    setForm({ ...form, stage: e.target.value })
+                  }
+                />
+              </div>
 
-              <textarea
-                className="form-control mb-3"
-                placeholder="Write farming advice here..."
-                rows="4"
-                onChange={(e) => setForm({ ...form, advice: e.target.value })}
-              />
+              <div style={innerCard}>
+                <label>Advice</label>
+                <textarea
+                  className="form-control"
+                  rows="3"
+                  placeholder="Write farming advice..."
+                  onChange={(e) =>
+                    setForm({ ...form, advice: e.target.value })
+                  }
+                />
+              </div>
 
-              <button className="btn btn-success w-100" type="submit">
+              <button className="btn btn-success w-100 mt-3">
                 Add Rule
               </button>
             </form>
@@ -88,3 +114,4 @@ export default function Admin() {
     </>
   );
 }
+
