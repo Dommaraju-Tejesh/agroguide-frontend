@@ -21,7 +21,7 @@ export default function Dashboard() {
       <div
         style={{
           backgroundImage:
-            "url(''https://images.unsplash.com/photo-1500382017468-9049fed747ef')",
+            "url('https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?q=80&w=2000&auto=format&fit=crop')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "100vh",
