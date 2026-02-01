@@ -11,37 +11,33 @@ export default function Register() {
   const sendOTP = async () => {
   try {
     await api.post("/otp/send-otp", {
-      phone: `+91${phone}`,   // ❌ NO +91 here
+      phone: `+91${phone}`,   // ✅ REQUIRED
     });
+
     alert("OTP Sent ✅");
     setStep(2);
   } catch (err) {
     alert("OTP send failed ❌");
-    console.log(err);
+    console.log(err.response?.data);
   }
 };
 
-
-  const verifyOTP = async () => {
+const verifyOTP = async () => {
   try {
     await api.post("/otp/verify-otp", {
-      phone: `+91${phone}`,   // ❌ NO +91 here
-      otp: otp,
-    });
-
-    await api.post("/auth/register", {
       name,
-      phone: `+91${phone}`,   // ❌ NO +91 here
-      password: "default123",
+      phone: `+91${phone}`,   // ✅ REQUIRED
+      otp: otp,
     });
 
     alert("Registered Successfully ✅");
     window.location.href = "/";
   } catch (err) {
     alert("OTP verification failed ❌");
-    console.log(err);
+    console.log(err.response?.data);
   }
 };
+
 
 
   return (
