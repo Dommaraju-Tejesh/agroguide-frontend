@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 
 export default function Login() {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
 
   const sendOTP = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/otp/send-otp", { phone });
+      await api.post("/otp/send-otp", {
+        phone: phone,
+      });
       alert("OTP Sent ✅");
       setStep(2);
     } catch (err) {
@@ -23,13 +26,15 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await api.post("/otp/verify-otp", {
-        phone,
-        otp,
+        phone: phone,
+        otp: otp,
       });
 
+      // 🔥 store user
       localStorage.setItem("user", JSON.stringify(res.data.user));
+
       alert("Login Successful ✅");
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } catch (err) {
       alert("OTP verification failed ❌");
       console.log(err);
@@ -43,8 +48,6 @@ export default function Login() {
           "url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundBlendMode: "darken",
-        backgroundColor: "rgba(0,0,0,0.6)",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -54,9 +57,9 @@ export default function Login() {
       <div
         style={{
           backdropFilter: "blur(12px)",
-          background: "rgba(0,0,0,0.55)",
+          background: "rgba(0,0,0,0.6)",
           padding: "40px",
-          borderRadius: "15px",
+          borderRadius: "20px",
           width: "360px",
           color: "white",
           textAlign: "center",
@@ -83,7 +86,6 @@ export default function Login() {
                 border: "none",
               }}
             />
-
             <button
               type="submit"
               style={{
@@ -116,7 +118,6 @@ export default function Login() {
                 border: "none",
               }}
             />
-
             <button
               type="submit"
               style={{

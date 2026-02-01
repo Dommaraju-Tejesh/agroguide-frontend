@@ -23,21 +23,23 @@ export default function Register() {
 
 const verifyOTP = async () => {
   try {
-    await api.post("/otp/verify-otp", {
+    const res = await api.post("/otp/verify-otp", {
       name,
-      phone: phone,   // ✅ NO +91
+      phone: phone,
       otp: otp,
     });
 
-    alert("Registered Successfully ✅");
-    window.location.href = "/";
+    // ✅ store user in localStorage (LOGIN STATE)
+    localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    alert("Registered & Logged in ✅");
+
+    window.location.href = "/dashboard";   // go to dashboard
   } catch (err) {
     alert("OTP verification failed ❌");
     console.log(err);
   }
 };
-
-
 
 
   return (
