@@ -45,7 +45,7 @@ export default function Login() {
     <div
       style={{
         backgroundImage:
-          "url('https://images.unsplash.com/photo-1560493676-04071c5f467b')",
+          "url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
